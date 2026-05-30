@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPCA2026 タイムテーブル｜Off-the-JT 単位×会場</title>
+<style>
+  :root{
+    --green:#1f6f54; --green-d:#15503c; --bg:#eef5f7; --card:#ffffff;
+    --orange:#e8843c; --ink:#1d2a2a; --muted:#6b7c7c; --line:#dde8e8;
+    --c-edu:#2f7dd1; --c-cli:#1f9d72; --c-mgmt:#9b59b6; --c-res:#c0392b; --c-oth:#8a9a9a;
+    --shadow:0 1px 2px rgba(20,60,50,.06),0 6px 18px rgba(20,60,50,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",
+                "Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  header.top{
+    background:linear-gradient(120deg,var(--green-d),var(--green));
+    color:#fff; padding:18px 16px 16px;
+  }
+  .wrap{max-width:1080px;margin:0 auto}
+  header.top h1{font-size:1.18rem;margin:0;font-weight:700;letter-spacing:.02em}
+  header.top p{margin:4px 0 0;font-size:.78rem;opacity:.85}
+  .sticky{
+    position:sticky;top:0;z-index:30;background:rgba(238,245,247,.96);
+    backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+    padding:10px 16px;
+  }
+  .filter-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+  .filter-row:last-child{margin-bottom:0}
+  .flabel{font-size:.7rem;color:var(--muted);font-weight:700;margin-right:2px;min-width:34px}
+  .chip{
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+    padding:5px 12px;border-radius:999px;font-size:.8rem;cursor:pointer;
+    transition:all .12s;user-select:none;white-space:nowrap;
+  }
+  .chip:hover{border-color:var(--green)}
+  .chip.on{background:var(--green);color:#fff;border-color:var(--green);font-weight:600}
+  .chip[data-dom].on{color:#fff}
+  .chip.dom-edu.on{background:var(--c-edu);border-color:var(--c-edu)}
+  .chip.dom-cli.on{background:var(--c-cli);border-color:var(--c-cli)}
+  .chip.dom-mgmt.on{background:var(--c-mgmt);border-color:var(--c-mgmt)}
+  .chip.dom-res.on{background:var(--c-res);border-color:var(--c-res)}
+  .chip.dom-oth.on{background:var(--c-oth);border-color:var(--c-oth)}
+  .search{flex:1;min-width:140px;border:1px solid var(--line);border-radius:8px;
+    padding:6px 10px;font-size:.82rem;font-family:inherit}
+  .count{font-size:.74rem;color:var(--muted);margin:10px 16px 0}
+  main{padding:4px 16px 60px}
+  .timeblock{margin-top:18px}
+  .tb-head{
+    display:flex;align-items:baseline;gap:8px;
+    border-left:4px solid var(--orange);padding-left:10px;margin-bottom:10px;
+  }
+  .tb-head .t{font-size:1.02rem;font-weight:700}
+  .tb-head .d{font-size:.74rem;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+  .card{
+    background:var(--card);border-radius:12px;padding:12px 13px;box-shadow:var(--shadow);
+    border-left:5px solid var(--c-oth);position:relative;
+  }
+  .card.d-edu{border-left-color:var(--c-edu)}
+  .card.d-cli{border-left-color:var(--c-cli)}
+  .card.d-mgmt{border-left-color:var(--c-mgmt)}
+  .card.d-res{border-left-color:var(--c-res)}
+  .card .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+  .room{
+    background:var(--green-d);color:#fff;font-size:.74rem;font-weight:700;
+    padding:2px 9px;border-radius:6px;letter-spacing:.02em;
+  }
+  .badge{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff}
+  .b-edu{background:var(--c-edu)} .b-cli{background:var(--c-cli)}
+  .b-mgmt{background:var(--c-mgmt)} .b-res{background:var(--c-res)} .b-oth{background:var(--c-oth)}
+  .sess{font-size:.7rem;color:var(--muted);font-weight:600}
+  .title{font-size:.9rem;font-weight:600;line-height:1.45;margin:2px 0 8px}
+  .credits{display:flex;gap:6px;flex-wrap:wrap}
+  .cr{font-size:.66rem;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--muted)}
+  .cr b{color:var(--orange);font-weight:700}
+  .cr.off{opacity:.35}
+  .empty{text-align:center;color:var(--muted);padding:50px 0;font-size:.9rem}
+  footer{padding:18px 16px 30px;color:var(--muted);font-size:.72rem;text-align:center}
+  @media(max-width:520px){
+    .grid{grid-template-columns:1fr}
+    header.top h1{font-size:1.02rem}
+  }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <h1>第17回 日本プライマリ・ケア連合学会学術大会</h1>
+  <p>Off-the-job Training 単位 × 会場 タイムテーブル（現地開催プログラム）</p>
+</div></header>
+
+<div class="sticky"><div class="wrap">
+  <div class="filter-row">
+    <span class="flabel">日付</span>
+    <span class="chip on" data-date="all">すべて</span>
+    <span class="chip" data-date="5/29">5/29(金)</span>
+    <span class="chip" data-date="5/30">5/30(土)</span>
+    <span class="chip" data-date="5/31">5/31(日)</span>
+  </div>
+  <div class="filter-row">
+    <span class="flabel">領域</span>
+    <span class="chip dom-all on" data-dom="all">すべて</span>
+    <span class="chip dom-cli"  data-dom="臨床">臨床</span>
+    <span class="chip dom-edu"  data-dom="教育">教育</span>
+    <span class="chip dom-mgmt" data-dom="マネジメント">マネジメント</span>
+    <span class="chip dom-res"  data-dom="研究">研究</span>
+    <span class="chip dom-oth"  data-dom="その他">その他</span>
+  </div>
+  <div class="filter-row">
+    <span class="flabel">検索</span>
+    <input class="search" id="q" placeholder="キーワード（タイトル・会場・セッション名）">
+  </div>
+</div></div>
+
+<div class="count" id="count"></div>
+<main><div class="wrap" id="list"></div></main>
+<footer class="wrap">
+  単位表記 = 現地 / LIVE / 事後オンデマンド。ミニステージ・カフェ企画等は単位対象外（領域=その他）。<br>
+  ※掲載内容はアップロードされたプログラム表に基づく簡易作成版です。最終確認は公式資料をご参照ください。
+</footer>
+
+<script>
+const DATA = [{"date": "5/29", "start": "13:30", "end": "15:00", "sess": "インタレストグループ1", "room": "第11会場", "title": "遺伝にかかわる対話とケアの統合 ～科学と物語、倫理を架橋する～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション1", "room": "第12会場", "title": "プライマリ・ケア版チームSTEPPS －チーム員同士のつながり方を学ぶ－", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション2", "room": "第13会場", "title": "プライマリケア医とリウマチ医をつなげる膠原病フォローアップの実際", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション3", "room": "第14会場", "title": "みんなで作る心理社会的問診フレーズ集", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "13:30", "end": "15:00", "sess": "インタレストグループ2", "room": "第15会場", "title": "国際委員会presents: ハーバード流プライマリ・ケア教育－医学部から専攻医研修まで－", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "15:15", "end": "16:45", "sess": "インタラクティブセッション4", "room": "第11会場", "title": "『つながり』を紡ぐ関係のデザイン―コミュニティナースがひらく地域ケアの可能性", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "15:15", "end": "16:45", "sess": "インタラクティブセッション5", "room": "第12会場", "title": "薬でつながる多職種連携", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "15:15", "end": "16:45", "sess": "インタレストグループ3", "room": "第13会場", "title": "病院から在宅へ、患者・家族と共に誤嚥性肺炎のケアをつなぐ：多職種のジレンマと協働を考える", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "15:15", "end": "16:45", "sess": "インタレストグループ4", "room": "第14会場", "title": "総合診療医のキャリアと大学", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/29", "start": "15:15", "end": "16:45", "sess": "インタラクティブセッション6", "room": "第15会場", "title": "肩こりから広がる“つながり”の診療──解剖・身体診察・エコーを結ぶ多職種アプローチ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:15", "end": "10:00", "sess": "ミニステージ", "room": "ミニステージ", "title": "Youは何しに学会へ？学術大会の参加者の皆様を大歓迎！", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "教育講演1", "room": "第1会場", "title": "Annual Evidence Update in Primary Care 2026", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム1", "room": "第2会場", "title": "専攻医・専門医が問う「そもそも家庭医療専門医は必要なのか」", "domain": "教育", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "学会ジョイントプログラム1", "room": "第3会場", "title": "つながれ、病院！―病病連携のミスコミュニケーションを解消しよう―", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム2", "room": "第4会場", "title": "精神科病院で働くジェネラリストの役割とは？", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム3", "room": "第5会場", "title": "京都発！気候科学とプラネタリーヘルスの知見を活かし、市民とつなぐサステナブルな医療", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム4", "room": "第6会場", "title": "つながるアクション 〜プライマリ・ケアの各課題に対する包括的なアプローチの試み〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "インタレストグループ5", "room": "第7会場", "title": "学会認定プライマリ・ケア看護師のキャリア開発～キャリア形成・組織活用・地域貢献に必要な支援を考える～", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "インタラクティブセッション7", "room": "第8会場", "title": "「診断学×家庭医療学」 ～学問をつなぎ、視野を広げよう～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム5", "room": "第9会場", "title": "高度先進地域医療の実践", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "シンポジウム6", "room": "第10会場", "title": "つながりから生まれるじぶんらしさ：地域と職種を越えて広がるプライマリ・ケアの実践", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "インタレストグループ6", "room": "第14会場", "title": "東京と地方をつなぐ家庭医療二拠点インタレストグループ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:30", "end": "10:00", "sess": "インタラクティブセッション8", "room": "第15会場", "title": "あなたの診療が変わる——評価で学ぶSDM実践", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "08:30", "end": "16:45", "sess": "ミニステージ(喫茶室)", "room": "イベントホール1F", "title": "つながる喫茶室 – Generalist Café – 〜出張版 Nozomi’s afternoon tea party〜", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "三学会理事長鼎談", "room": "第1会場", "title": "三学会理事長鼎談", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "シンポジウム7", "room": "第2会場", "title": "Medical Generalismを考える", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "教育講演2", "room": "第3会場", "title": "ジェネラリストのための心因性愁訴診療 ―見逃さない鑑別と不安・抑うつへの実践的対応―", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "学会ジョイントプログラム2", "room": "第4会場", "title": "脆弱性骨折のコマネジメントとMulticomplexity ―急性期から在宅までの包括的アプローチ", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "シンポジウム8", "room": "第5会場", "title": "小中高校生の部活や地域スポーツに対するプライマリ・ケアの役割", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "学会ジョイントプログラム3", "room": "第6会場", "title": "遠隔連携診療がひらく新しい緩和ケア連携", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "インタレストグループ7", "room": "第7会場", "title": "コミュニティホスピタルのDX〜プライマリ・ケア現場の定型業務をAIで自動化する実践ワークショップ〜", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "インタラクティブセッション9", "room": "第8会場", "title": "根拠に基づく予防医療の実践 個々の患者に対するアプローチ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "シンポジウム9", "room": "第9会場", "title": "つなげる総合診療の学び：専門医制度の協調で実現する持続可能な生涯学習", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "シンポジウム10", "room": "第10会場", "title": "ICT診療委員会による診療科偏在対策のための適切な遠隔医療等推進事業について", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "インタレストグループ8", "room": "第14会場", "title": "Deep End Case Conferenceを体感しよう！", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "インタレストグループ9", "room": "第15会場", "title": "診療所で医学生・研修医に“地域を教える” ―地域・保健医療教育リデザインワークショップ―", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "10:15", "end": "11:45", "sess": "ミニステージ(聴覚障害)", "room": "ミニステージ", "title": "聴覚障害者の医療体験を疑似体験しよう", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "12:10", "end": "13:20", "sess": "開会式/大会長講演/理事長講演", "room": "第1会場", "title": "開会式/大会長講演/理事長講演", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "メインシンポジウム", "room": "第1会場", "title": "つながる、つなげる。家庭医療／総合診療が描く未来のケアネットワーク（Collaborating for Care. Connecting for Change: Lessons from Canada and Japan）", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "学会ジョイントプログラム4", "room": "第2会場", "title": "Meet the expert 感染症専門医はプライマリ・ケア医からの疑問に応えられるのか？", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "学会ジョイントプログラム5", "room": "第3会場", "title": "「深さ」と「広さ」がつながる ― 専門性と総合性が響き合う地域医療の未来 ―", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "シンポジウム11", "room": "第4会場", "title": "ME/CFS, Long COVID: MUSとしない総合診療専門医の責任", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "教育講演3", "room": "第5会場", "title": "地域を救う、最初の一手 - 診る・判断する・つなぐ救急対応のアート -", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "シンポジウム12", "room": "第6会場", "title": "総合医リカレント教育の現在地と展望", "domain": "教育", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション10", "room": "第7会場", "title": "コミドク流まちのみかた～「みる・はいる・つくる」の3ステップで地域ケアを実践しよう～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション11", "room": "第8会場", "title": "明日から始めるLGBTQ+フレンドリーな医療機関づくりの実践 ― 現場の工夫と壁の乗り越え方 ―", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "シンポジウム13", "room": "第9会場", "title": "誰も聞けない災害時のお金の話：事業継続の必須知識", "domain": "臨床", "sub": "臨床（災害）", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "教育講演4", "room": "第10会場", "title": "知らぬ間に“COI”～あなたの講演にも潜む利益相反～", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "インタレストグループ10", "room": "第14会場", "title": "多職種がつなげる診断プロセス、多職種がつながる診断エクセレンス", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "インタラクティブセッション12", "room": "第15会場", "title": "心と技と体をつなげて 息辛い世の 息がつながる！急性呼吸困難レクチャー＆ハンズオンセッション", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "13:30", "end": "15:00", "sess": "ミニステージ(キャリア)", "room": "ミニステージ", "title": "キャリアを拓く“つながり”の力：学術大会を「越境」のキャリア資源に変える", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "シンポジウム14", "room": "第1会場", "title": "市中病院 × 大学でつくる“学び”と“研究”—寄附・連携講座をどう始めるか、どう続けるか", "domain": "研究", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "学会ジョイントプログラム6", "room": "第2会場", "title": "総合診療分野の各学会って、何が違うの？ ～徹底討論！3つの専門性と「ボーダレスな学び」に向けて～", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "学会ジョイントプログラム7", "room": "第3会場", "title": "こんな時には漢方・鍼灸", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "教育講演5", "room": "第4会場", "title": "小児在宅医療の実践 ～在宅でつながる小児から移行期へ～（仮）", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "シンポジウム15", "room": "第5会場", "title": "「プライマリ・ヘルスケアにおける看護のリーダーシップ：豪州APNAとの共同プログラム」", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "シンポジウム16", "room": "第6会場", "title": "地域の力を引き出す！プライマリ・ケア実践における演劇的手法のススメ", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "インタレストグループ11", "room": "第7会場", "title": "日英のプライマリ・ケアについて考える 〜学会が支援する 日英プライマリ・ケア交換留学プログラム〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "インタレストグループ12", "room": "第8会場", "title": "多職種で実践するACP〜現場からの声とネットワーク形成〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "シンポジウム17", "room": "第9会場", "title": "結局どうする？高尿酸血症治療 pros/consで徹底討論！", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "学会ジョイントプログラム8", "room": "第10会場", "title": "腹膜透析の普及には地域連携が鍵～専門医と非専門医のマッチング～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "インタラクティブセッション13", "room": "第15会場", "title": "はっちぼっちステーション出張版2026", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/30", "start": "15:15", "end": "16:45", "sess": "ミニステージ(Bar)", "room": "ミニステージ", "title": "RealOfftheRecord@JPCA2026～Generalist Bar×キャリアcafe～", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:15", "end": "10:00", "sess": "ミニステージ", "room": "ミニステージ", "title": "Youは何しに学会へ？学術大会の参加者の皆様を大歓迎！", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "シンポジウム18", "room": "第1会場", "title": "U40HFコラボ「選択がつなぐ心不全診療 ─ 総合医と循環器医のつながりが紡ぐ臨床思考─」", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "シンポジウム19", "room": "第2会場", "title": "ネガキャン・コレクション2026～次世代のリアルな思い～", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "学会ジョイントプログラム9", "room": "第3会場", "title": "専攻医に在宅医療を教える 〜多職種の視点で在宅医療研修を考える〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "シンポジウム20", "room": "第4会場", "title": "区別をつなぐ・問い直す・超える -家庭医療(学)における「こころ」と「からだ」を再考する-", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "医療政策関連企画", "room": "第5会場", "title": "【医療政策関連企画】 プライマリ・ケアを活かす医療政策の共創", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "学会ジョイントプログラム10", "room": "第6会場", "title": "プライマリ・ケア現場で出会う外国人患者対応に役立つ実践知：大きな安心につながる工夫と取り組み", "domain": "教育", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "インタラクティブセッション14", "room": "第7会場", "title": "じぶんらしく動く、小さな一歩から：メディカルフィットネスでつながる新しいプライマリ・ケア", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "インタラクティブセッション15", "room": "第8会場", "title": "ワールドカフェでプライマリ・ケア研究キャリアについて考えよう！ そしてリサーチの人脈をつくろう！", "domain": "研究", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "シンポジウム21", "room": "第9会場", "title": "患者中心の医療の実現に向けて、薬薬連携をどのように推進していくか〜病院と薬局の薬剤師が“つながる・つなげる”〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "シンポジウム22", "room": "第10会場", "title": "ビジョンを「動力」に変えるチカラ ～チームづくりとビジョナリーな実践～", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "インタレストグループ13", "room": "第14会場", "title": "栄養のチカラ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "インタラクティブセッション16", "room": "第15会場", "title": "学会とプログラム責任者がつながる対話の場：WONCA認証を踏まえたプログラム運営のこれから", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "15:45", "sess": "ミニステージ(喫茶室)", "room": "イベントホール1F", "title": "つながる喫茶室 – Generalist Café – 〜出張版 Nozomi’s afternoon tea party〜", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "08:30", "end": "10:00", "sess": "カフェ企画(専攻医)", "room": "イベントホール2F", "title": "専攻医キャリアカフェ2026：語りとつながりで未来を描く家庭医たち", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "特別企画", "room": "第1会場", "title": "特別企画「19番目のカルテ」関連企画", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "シンポジウム23", "room": "第2会場", "title": "病みの軌跡を意識した患者に寄り添う心不全診療 ― 循環器医と総合診療医、それぞれの視点から", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "シンポジウム24", "room": "第4会場", "title": "専門性の高い病院『外来』から在宅医療へのケア移行 ～多職種で検討するケア移行の課題と取り組み", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "学会ジョイントプログラム11", "room": "第5会場", "title": "母性内科医と考える家庭医による思春期世代のケア", "domain": "臨床", "sub": "臨床(ウィメンズヘルス)", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "シンポジウム25", "room": "第6会場", "title": "つながる・つなげる 臨床と診療データベース ～PBRNにおける課題と解決策～", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "インタレストグループ14", "room": "第7会場", "title": "プライマリ・ケア看護と診療報酬～日々の看護を診療報酬の視点で学び、考える～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "インタラクティブセッション17", "room": "第8会場", "title": "指導医講習会：職場基盤評価（WPBA）を臨床現場に実装する", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "シンポジウム26", "room": "第9会場", "title": "ユマニチュードの実践", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "教育講演6", "room": "第10会場", "title": "深みを持たせる総合診療 〜やっちゃえ！Genespelist Refeeding症候群 編〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "インタラクティブセッション18", "room": "第14会場", "title": "発達特性を持つ医療者が安心安全に働くために ～多職種で語る～", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "インタレストグループ15", "room": "第15会場", "title": "プライマリ・ケアの現場でChoosing Wisely を考える―低価値医療を減らすために", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "ミニステージ(診断アタック)", "room": "ミニステージ", "title": "診断アタック25！！ K2×大阪4大学総合診療科 ―つながる力・つなげる未来―", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "10:15", "end": "11:45", "sess": "カフェ企画(がんノート)", "room": "イベントホール2F", "title": "ボードゲームでがん患者の旅路を追体験！がんノートJOURNEY", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "シンポジウム27", "room": "第1会場", "title": "社会的処方：世界に広がる現状と日本のプライマリ・ケアへの期待", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "学会ジョイントプログラム12", "room": "第3会場", "title": "ケースから学ぶ プライマリ・ケアにおける医療の質と安全", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "シンポジウム28", "room": "第2会場", "title": "グローバルスタンダードに基づく家庭医療専門研修制度の構築と今後の展望", "domain": "教育", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "シンポジウム29", "room": "第4会場", "title": "地域とともに進化する病院と薬局 ― コミュニティホスピタルの新しいかたち", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "シンポジウム30", "room": "第5会場", "title": "チーム医療をイノベーションするチームコーチング～成果を創り、ウェルビーイングを向上する", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "シンポジウム31", "room": "第6会場", "title": "わたしたちのネガティブ・ケイパビリティ vol.2 ～臨床を歩む杖～", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "インタレストグループ16", "room": "第7会場", "title": "プライマリ・ケアにおけるアルコール問題支援インタレストグループ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "インタラクティブセッション19", "room": "第8会場", "title": "「患者と家族のために！ ～つながる、つなげる。つなげる、つながるための臨床倫理を体得しよう！～」", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "教育講演7", "room": "第9会場", "title": "施設入居者の“最適な治療”を考える：つなげる、つながる判断の実際", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "教育講演8", "room": "第10会場", "title": "貴方の電子カルテ端末にAIを 仮想ブラウザの導入と応用", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "インタレストグループ17", "room": "第14会場", "title": "医師のキャリアチェンジ支援について考える―スペシャリストからジェネラリストへ―", "domain": "教育", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "インタラクティブセッション20", "room": "第15会場", "title": "医療的ケア児に自分らしくつながるために 〜子どもの成長という時間軸から考える役割〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "12:30", "end": "14:00", "sess": "ミニステージ(学生カフェ)", "room": "ミニステージ", "title": "学生カフェ企画〜医療系学生から全国へ！〜メディカフェラリーJPCA店", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム32", "room": "第1会場", "title": "家庭医療専門研修プログラムGood Practice Collection", "domain": "教育", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム33", "room": "第2会場", "title": "ワクチンアップデート2026〜つながることでみんなをVPDから守る〜", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "学会ジョイントプログラム13", "room": "第3会場", "title": "きづけてる？見逃されている性虐待〜プライマリ・ケアの臨床で知っておくべき性虐待の対応と子どもの権利", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム34", "room": "第4会場", "title": "明日からできる！ウィメンズヘルスの実践と研修プログラムをつくろう", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム35", "room": "第5会場", "title": "specialist×generalist ～在宅医療連携の課題から見えた実践の可能性～", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム36", "room": "第6会場", "title": "心療内科と総合診療の協働で学ぶBPSモデル ―現場で“使える”実践へ―", "domain": "臨床", "sub": "", "local": "1.5", "live": "0.5", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "インタレストグループ18", "room": "第7会場", "title": "学習者がつながる家庭医療の多職種カンファレンスのつくりかた", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "インタラクティブセッション21", "room": "第8会場", "title": "つながる、つなげる、プライマリ・ケア薬剤師のプロフェッショナル・アイデンティティ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム37", "room": "第9会場", "title": "総合診療×病院経営～総合診療医が経営を通して地域をつなぐ可能性を探る～", "domain": "マネジメント", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "シンポジウム38", "room": "第10会場", "title": "外国人協働社会における実践型感染症対策と健康支援―外国籍住民・海外渡航者のために", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": "0.5"}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "インタラクティブセッション22", "room": "第14会場", "title": "Pharm G！ー AI模擬患者との問診トレーニング", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "インタラクティブセッション23", "room": "第15会場", "title": "学生発信！「まるごと診る」を学ぶ、身体診察体験ワークショップ", "domain": "臨床", "sub": "", "local": "1.5", "live": "", "ondemand": ""}, {"date": "5/31", "start": "14:15", "end": "15:45", "sess": "ミニステージ(Bar)", "room": "ミニステージ", "title": "RealOfftheRecord@JPCA2026～Generalist Bar×キャリアcafe～", "domain": "その他", "sub": "", "local": "", "live": "", "ondemand": ""}];
+const DOM_KEY = {"教育":"edu","臨床":"cli","マネジメント":"mgmt","研究":"res","その他":"oth"};
+const DAY_LABEL = {"5/29":"5/29(金)","5/30":"5/30(土)","5/31":"5/31(日)"};
+let fDate="all", fDom="all", fQ="";
+
+function bindChips(attr, setter){
+  document.querySelectorAll('.chip['+attr+']').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('.chip['+attr+']').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on'); setter(c.getAttribute(attr)); render();
+    });
+  });
+}
+bindChips('data-date', v=>fDate=v);
+bindChips('data-dom',  v=>fDom=v);
+document.getElementById('q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();render();});
+
+function credit(label,val){
+  const off = !val;
+  return `<span class="cr ${off?'off':''}">${label} ${off?'—':'<b>'+val+'</b>'}</span>`;
+}
+
+function render(){
+  const list=document.getElementById('list');
+  let rows=DATA.filter(d=>
+    (fDate==="all"||d.date===fDate) &&
+    (fDom==="all"||d.domain===fDom) &&
+    (fQ===""||(d.title+d.room+d.sess).toLowerCase().includes(fQ))
+  );
+  document.getElementById('count').textContent = `${rows.length} 件表示`;
+  if(!rows.length){list.innerHTML='<div class="empty">該当するセッションがありません</div>';return;}
+
+  // 日付→時間枠でグループ化
+  const groups={};
+  rows.forEach(d=>{
+    const k=d.date+"|"+d.start+"|"+d.end;
+    (groups[k]=groups[k]||[]).push(d);
+  });
+  const keys=Object.keys(groups).sort((a,b)=>{
+    const [da,sa]=a.split("|"),[db,sb]=b.split("|");
+    return da===db ? sa.localeCompare(sb) : da.localeCompare(db);
+  });
+
+  let html="",lastDate="";
+  keys.forEach(k=>{
+    const [date,start,end]=k.split("|");
+    if(date!==lastDate){lastDate=date;html+=`<div style="margin-top:22px;font-weight:800;color:var(--green-d);font-size:1.05rem">${DAY_LABEL[date]}</div>`;}
+    html+=`<div class="timeblock"><div class="tb-head"><span class="t">${start}–${end}</span><span class="d">${groups[k].length}セッション</span></div><div class="grid">`;
+    groups[k].forEach(d=>{
+      const dk=DOM_KEY[d.domain]||"oth";
+      const domLabel = d.sub || d.domain;
+      html+=`<div class="card d-${dk}">
+        <div class="meta">
+          <span class="room">${d.room}</span>
+          <span class="badge b-${dk}">${domLabel}</span>
+          <span class="sess">${d.sess}</span>
+        </div>
+        <div class="title">${d.title}</div>
+        <div class="credits">
+          ${credit("現地",d.local)}${credit("LIVE",d.live)}${credit("録画",d.ondemand)}
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  list.innerHTML=html;
+}
+render();
+</script>
+</body>
+</html>
